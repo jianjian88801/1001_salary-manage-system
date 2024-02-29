@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.SalaryDao">
+    <resultMap id="salary" type="com.lsnu.sms.model.Salary">
+        <id column="id" property="id"/>
+        <result column="work_id" property="workId"/>
+        <result column="true_name" property="trueName"/>
+        <result column="base_salary" property="baseSalary"/>
+        <result column="subsidy" property="subsidy"/>
+    </resultMap>
+    <insert id="add">
+        insert into base_salary_set (work_id)
+        values (#{workId})
+    </insert>
+    <select id="getList" resultMap="salary" parameterType="Map">
+        SELECT base_salary_set.*,staff.true_name as true_name
+        FROM base_salary_set LEFT JOIN staff ON base_salary_set.work_id = staff.work_id
+        where 1=1
+        <if test="workId != ''">
+            and staff.work_id = #{workId}
+        </if>
+        and staff.true_name LIKE #{trueName}
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="getTotal" resultType="Integer" parameterType="Map">
+        SELECT COUNT(base_salary_set.id)
+        FROM base_salary_set LEFT JOIN staff ON base_salary_set.work_id = staff.work_id
+        where 1=1
+        <if test="workId != ''">
+            and staff.work_id = #{workId}
+        </if>
+        and staff.true_name LIKE #{trueName}
+    </select>
+    <delete id="delete">
+        delete from base_salary_set where work_id = #{workId}
+    </delete>
+    <update id="edit">
+        update base_salary_set set base_salary = #{baseSalary},subsidy = #{subsidy}
+         where work_id = #{workId}
+    </update>
+    <select id="getValue" resultType="String" parameterType="String">
+        SELECT base_salary FROM base_salary_set
+        WHERE work_id = #{workId}
+    </select>
+</mapper>

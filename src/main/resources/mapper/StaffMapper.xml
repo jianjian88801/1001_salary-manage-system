@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.StaffDao">
+    <resultMap id="staff" type="com.lsnu.sms.model.Staff">
+        <id column="id" property="id"/>
+        <result column="work_id" property="workId"/>
+        <result column="true_name" property="trueName"/>
+        <result column="id_card" property="idCard"/>
+        <result column="birthday" property="birthday"/>
+        <result column="politics" property="politics"/>
+        <result column="sex" property="sex"/>
+        <result column="marry" property="marry"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="phone" property="phone"/>
+        <result column="graduated_school" property="graduatedSchool"/>
+        <result column="education" property="education"/>
+        <result column="entry_time" property="entryTime"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="address" property="address"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+    <select id="getInfo" parameterType="String" resultMap="staff">
+        select * from staff where work_id = #{workId}
+    </select>
+    <update id="edit" parameterType="Staff" >
+        update staff set update_time = now()
+        <if test="trueName != ''">
+        ,true_name = #{trueName}
+        </if>
+        <if test="idCard != ''">
+        ,id_card = #{idCard}
+        </if>
+        <if test="birthday != ''">
+        ,birthday = #{birthday}
+        </if>
+        <if test="politics != ''">
+        ,politics = #{politics}
+        </if>
+        <if test="sex != ''">
+        ,sex = #{sex}
+        </if>
+        <if test="marry != ''">
+        ,marry = #{marry}
+        </if>
+        <if test="nativePlace != ''">
+        ,native_place = #{nativePlace}
+        </if>
+        <if test="phone != ''">
+        ,phone = #{phone}
+        </if>
+        <if test="graduatedSchool != ''">
+        ,graduated_school = #{graduatedSchool}
+        </if>
+        <if test="education != ''">
+        ,education = #{education}
+        </if>
+        <if test="entryTime != ''">
+        ,entry_time = #{entryTime}
+        </if>
+        <if test="deptId != ''">
+        ,dept_id = #{deptId}
+        </if>
+        <if test="address != ''">
+        ,address = #{address}
+        </if>
+        <if test="remark != ''">
+            ,remark = #{remark}
+        </if>
+        where work_id = #{workId}
+    </update>
+    <select id="getList" resultMap="staff" parameterType="Map">
+        SELECT staff.*,dept.dept_name as dept_name
+        FROM staff LEFT JOIN dept ON staff.dept_id = dept.dept_id
+        where 1=1
+        <if test="workId != ''">
+            and staff.work_id = #{workId}
+        </if>
+        and true_name LIKE #{trueName}
+        <if test="sex != ''">
+            and sex = #{sex}
+        </if>
+        <if test="timeMin != '' and timeMax == ''">
+            and entry_time &gt;=#{timeMin}
+        </if>
+        <if test="timeMin == '' and timeMax != ''">
+            and entry_time &lt;=#{timeMax}
+        </if>
+        <if test="timeMin != '' and timeMax != ''">
+            and entry_time between #{timeMin} and #{timeMax}
+        </if>
+        order by id desc
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="getTotal" resultType="Integer" parameterType="Map">
+        SELECT COUNT(staff.work_id)
+        FROM staff LEFT JOIN dept ON staff.dept_id = dept.dept_id
+        where 1=1
+        <if test="workId != ''">
+            and staff.work_id = #{workId}
+        </if>
+        and true_name LIKE #{trueName}
+        <if test="sex != ''">
+            and sex = #{sex}
+        </if>
+        <if test="timeMin != '' and timeMax == ''">
+            and entry_time &gt;=#{timeMin}
+        </if>
+        <if test="timeMin == '' and timeMax != ''">
+            and entry_time &lt;=#{timeMax}
+        </if>
+        <if test="timeMin != '' and timeMax != ''">
+            and entry_time between #{timeMin} and #{timeMax}
+        </if>
+    </select>
+    <select id="findById" resultMap="staff" parameterType="String">
+        select * from staff
+        where work_id = #{workId}
+    </select>
+    <insert id="add">
+        insert into staff (work_id,true_name,id_card,sex,birthday,politics,
+        marry,native_place,phone,graduated_school,education,entry_time,
+        dept_id,address,update_time,remark)
+        values (#{workId},#{trueName},#{idCard},#{sex},#{birthday},#{politics},
+        #{marry},#{nativePlace},#{phone},#{graduatedSchool},#{education},#{entryTime},
+        #{deptId},#{address},now(),#{remark})
+    </insert>
+    <delete id="delete">
+        delete from staff where work_id = #{workId}
+    </delete>
+    <select id="findByDeptId" resultMap="staff" parameterType="String">
+        select * from staff
+        where dept_id = #{deptId}
+    </select>
+    <select id="getAllWorkId" resultType="java.lang.String" >
+        SELECT work_id FROM staff
+    </select>
+</mapper>

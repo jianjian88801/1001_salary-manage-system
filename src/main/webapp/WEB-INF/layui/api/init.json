@@ -1,0 +1,107 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "welcome"
+  },
+  "logoInfo": {
+    "title": "工资管理系统",
+    "image": "../../layui/images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-user",
+          "target": "_self",
+          "child": [
+            {
+              "title": "基本资料",
+              "href": "../user/base_info",
+              "icon": "fa fa-tag",
+              "target": "_self"
+            },
+            {
+              "title": "修改密码",
+              "href": "../user/user_password",
+              "icon": "fa fa-wrench",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "人事管理",
+          "href": "",
+          "icon": "fa fa-user-secret",
+          "target": "_self",
+          "child": [
+            {
+              "title": "部门列表",
+              "href": "../dept/dept",
+              "icon": "fa fa-university",
+              "target": "_self"
+            },
+            {
+              "title": "员工列表",
+              "href": "../staff/list",
+              "icon": "fa fa-users",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "工资管理",
+          "href": "",
+          "icon": "fa fa-jpy",
+          "target": "_self",
+          "child": [
+            {
+              "title": "工资列表",
+              "href": "../salary/final",
+              "icon": "fa fa-list",
+              "target": "_self"
+            },
+            {
+              "title": "底薪设置",
+              "href": "../salary/base",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "保险设置",
+              "href": "../insurance/insurances",
+              "icon": "fa fa-heart",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "考勤管理",
+          "href": "",
+          "icon": "fa fa-bell",
+          "target": "",
+          "child": [
+            {
+              "title": "考勤列表",
+              "href": "../attendance/list",
+              "icon": "fa fa-list-ul",
+              "target": "_self"
+            },
+            {
+              "title": "考勤奖惩",
+              "href": "../attendance/set",
+              "icon": "fa fa-suitcase",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

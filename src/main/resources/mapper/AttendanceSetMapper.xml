@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.AttendanceSetDao">
+    <resultMap id="attendance" type="com.lsnu.sms.model.AttendanceSet">
+        <id column="id" property="id"/>
+        <result column="late_fine" property="late"/>
+        <result column="early_leave_fine" property="earlyLeave"/>
+        <result column="leave_fine" property="leave"/>
+        <result column="overtime_bonus" property="overtime"/>
+    </resultMap>
+    <select id="getList" resultMap="attendance" parameterType="Map">
+        SELECT * FROM attendance_set
+    </select>
+    <update id="edit">
+        update attendance_set set
+        late_fine = #{late}
+        ,early_leave_fine = #{earlyLeave}
+        ,leave_fine = #{leave}
+        ,overtime_bonus = #{overtime}
+    </update>
+</mapper>

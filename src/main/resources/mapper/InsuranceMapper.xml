@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.InsuranceDao">
+    <resultMap id="insurance" type="com.lsnu.sms.model.Insurance">
+        <id column="id" property="id"/>
+        <result column="endowment" property="endowment"/>
+        <result column="unemployment" property="unemployment"/>
+        <result column="employment_injury" property="employmentInjury"/>
+        <result column="maternity" property="maternity"/>
+        <result column="medical" property="medical"/>
+        <result column="accumulation" property="accumulation"/>
+    </resultMap>
+    <select id="getList" resultMap="insurance" parameterType="Map">
+        SELECT * FROM insurance
+    </select>
+    <update id="edit">
+        update insurance set
+        endowment = #{endowment}
+        ,unemployment = #{unemployment}
+        ,employment_injury = #{employmentInjury}
+        ,maternity = #{maternity}
+        ,medical = #{medical}
+        ,accumulation = #{accumulation}
+    </update>
+</mapper>

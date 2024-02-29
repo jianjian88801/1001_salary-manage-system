@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.DeptDao">
+    <resultMap id="dept" type="com.lsnu.sms.model.Dept">
+        <id column="id" property="id"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="work_id" property="workId"/>
+        <result column="dept_manager" property="deptManager"/>
+        <result column="dept_phone" property="deptPhone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+    <select id="getList" parameterType="Map" resultMap="dept">
+        select dept.*,staff.true_name as dept_manager
+        from dept left join staff on dept.work_id = staff.work_id
+        where 1=1
+        <if test="deptName != ''">
+            and dept_name like concat('%',#{deptName},'%')
+        </if>
+        <if test="deptManager != ''">
+        and staff.true_name like concat('%',#{deptManager},'%')
+        </if>
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="getTotal" parameterType="Map" resultType="Integer">
+        select count(dept.id)
+        from dept left join staff on dept.work_id = staff.work_id
+        where 1=1
+        <if test="deptName != ''">
+            and dept_name like concat('%',#{deptName},'%')
+        </if>
+        <if test="deptManager != ''">
+            and staff.true_name like concat('%',#{deptManager},'%')
+        </if>
+    </select>
+    <select id="findById" parameterType="String" resultMap="dept">
+        select * from dept
+        where dept_id = #{deptId}
+    </select>
+    <insert id="add">
+        insert into dept (dept_id,dept_name,work_id,dept_phone,create_time,update_time,remark)
+        values (#{deptId},#{deptName},#{workId},#{deptPhone},now(),now(),#{remark})
+    </insert>
+    <update id="edit" parameterType="Staff">
+        update dept set update_time = now()
+        ,dept_name = #{deptName}
+        ,work_id = #{workId}
+        ,dept_phone = #{deptPhone}
+        ,remark = #{remark}
+        where dept_id = #{deptId}
+    </update>
+    <delete id="delete">
+        delete from dept where dept_id = #{deptId}
+    </delete>
+    <select id="getDept" resultMap="dept">
+        select * from dept
+    </select>
+</mapper>

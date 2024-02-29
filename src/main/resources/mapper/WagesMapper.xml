@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.WagesDao">
+    <resultMap id="wages" type="com.lsnu.sms.model.Wages">
+        <id column="id" property="id"/>
+        <result column="work_id" property="workId"/>
+        <result column="true_name" property="trueName"/>
+        <result column="times" property="times"/>
+        <result column="base_pay" property="baseSalary"/>
+        <result column="subsidy" property="subsidy"/>
+        <result column="late" property="late"/>
+        <result column="early_leave" property="early"/>
+        <result column="rest" property="leave"/>
+        <result column="overtime" property="overtimes"/>
+        <result column="endowment" property="endowment"/>
+        <result column="unemployment" property="unemployment"/>
+        <result column="injury" property="injury"/>
+        <result column="maternity" property="maternity"/>
+        <result column="medical" property="medical"/>
+        <result column="accumulation" property="accumulation"/>
+        <result column="final_salary" property="finalSalary"/>
+    </resultMap>
+    <select id="findByTimes" parameterType="java.lang.String" resultType="Integer">
+        select count(id) from salary
+        where times = #{times}
+    </select>
+    <insert id="create">
+        insert into salary (work_id,times,base_pay,subsidy,late,early_leave,rest,overtime,endowment,unemployment,injury,maternity,medical,accumulation,final_salary)
+        values (#{workId},#{times},#{baseSalary},#{subsidy},#{late},#{early},#{leave},#{overtimes},#{endowment},#{unemployment},#{injury},#{maternity},#{medical},#{accumulation},#{finalSalary})
+    </insert>
+    <select id="getlist" resultMap="wages" parameterType="Map">
+        select salary.*,staff.true_name as true_name
+        FROM salary LEFT JOIN staff ON salary.work_id = staff.work_id
+        where 1=1
+        <if test="workId!= ''">
+            and salary.work_id = #{workId}
+        </if>
+        and staff.true_name like #{trueName}
+        <if test="times!= ''">
+            and salary.times = #{times}
+        </if>
+        order by salary.times desc
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="getTotal" parameterType="Map" resultType="Integer">
+        SELECT COUNT(salary.id)
+        FROM salary LEFT JOIN staff ON salary.work_id = staff.work_id
+        where 1=1
+        <if test="workId!= ''">
+            and salary.work_id = #{workId}
+        </if>
+        and staff.true_name like #{trueName}
+        <if test="times!= ''">
+            and salary.times = #{times}
+        </if>
+    </select>
+    <delete id="delete">
+        delete from salary
+        where work_id = #{workId}
+    </delete>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsnu.sms.dao.AttendanceDao">
+    <resultMap id="attendance" type="com.lsnu.sms.model.Attendance">
+        <id column="id" property="id"/>
+        <result column="work_id" property="workId"/>
+        <result column="true_name" property="trueName"/>
+        <result column="times" property="times"/>
+        <result column="late_times" property="lateTimes"/>
+        <result column="early_leave_times" property="earlyTimes"/>
+        <result column="leave_times" property="leaveTimes"/>
+        <result column="overtime_hours" property="overtimeHours"/>
+    </resultMap>
+    <select id="getList" resultMap="attendance" parameterType="Map">
+        SELECT attendance.*,staff.true_name as true_name
+        FROM attendance LEFT JOIN staff ON attendance.work_id = staff.work_id
+        where 1=1
+        <if test="workId!= ''">
+        and attendance.work_id = #{workId}
+        </if>
+        and staff.true_name like #{trueName}
+        <if test="times!= ''">
+            and attendance.times = #{times}
+        </if>
+        order by attendance.times desc
+        limit #{offset},#{pageSize}
+    </select>
+    <insert id="add">
+        insert into attendance (work_id,times,late_times,early_leave_times,leave_times,overtime_hours)
+        values (#{workId},#{times},0,0,0,0)
+    </insert>
+    <select id="getTotal" parameterType="Map" resultType="Integer">
+        SELECT COUNT(attendance.id)
+        FROM attendance LEFT JOIN staff ON attendance.work_id = staff.work_id
+        where 1=1
+        <if test="workId!= ''">
+            and attendance.work_id = #{workId}
+        </if>
+        and staff.true_name like #{trueName}
+        <if test="times!= ''">
+            and attendance.times = #{times}
+        </if>
+    </select>
+    <select id="findByTimes" parameterType="java.lang.String" resultType="Integer">
+        select count(id) from attendance
+        where times = #{times}
+    </select>
+    <update id="edit">
+        update attendance
+        set late_times = #{lateTimes},
+        early_leave_times = #{earlyTimes}
+        ,leave_times = #{leaveTimes}
+        ,overtime_hours = #{overtimeHours}
+        where work_id = #{workId} and times = #{times}
+    </update>
+    <select id="getValues" parameterType="Wages" resultMap="attendance">
+        select * from attendance
+        where work_id = #{workId} and times = #{times}
+    </select>
+    <select id="getAllWorkId" resultType="java.lang.String" parameterType="String">
+        SELECT work_id FROM attendance
+        where times = #{times}
+    </select>
+    <delete id="delete">
+        delete from attendance
+        where work_id = #{workId}
+    </delete>
+</mapper>
